@@ -1,0 +1,222 @@
+[
+  {
+    "id": 1,
+    "name": "List 1",
+    "items": [
+      {
+        "id": 1,
+        "name": "Item 1",
+        "quantity": 46,
+        "color": "#d1f9e4",
+        "checked": false
+      },
+      {
+        "id": 2,
+        "name": "Item 2",
+        "quantity": 26,
+        "color": "#06f679",
+        "checked": false
+      },
+      {
+        "id": 3,
+        "name": "Item 3",
+        "quantity": 30,
+        "color": "#df9c6d",
+        "checked": false
+      },
+      {
+        "id": 4,
+        "name": "Item 4",
+        "quantity": 28,
+        "color": "#ec0496",
+        "checked": false
+      },
+      {
+        "id": 5,
+        "name": "Item 5",
+        "quantity": 18,
+        "color": "#b445c8",
+        "checked": false
+      },
+      {
+        "id": 6,
+        "name": "Item 6",
+        "quantity": 6,
+        "color": "#b2e9b6",
+        "checked": false
+      }
+    ],
+    "state": "sorted",
+    "selected": false,
+    "selectedAll": false
+  },
+  {
+    "id": 2,
+    "name": "List 2",
+    "items": [
+      {
+        "id": 1,
+        "name": "Item 1",
+        "quantity": 40,
+        "color": "#7238eb",
+        "checked": false
+      },
+      {
+        "id": 2,
+        "name": "Item 2",
+        "quantity": 7,
+        "color": "#39280a",
+        "checked": false
+      },
+      {
+        "id": 3,
+        "name": "Item 3",
+        "quantity": 50,
+        "color": "#97f4f2",
+        "checked": false
+      },
+      {
+        "id": 4,
+        "name": "Item 4",
+        "quantity": 29,
+        "color": "#6a2452",
+        "checked": false
+      }
+    ],
+    "state": "sorted",
+    "selected": false,
+    "selectedAll": false
+  },
+  {
+    "id": 3,
+    "name": "List 3",
+    "items": [
+      {
+        "id": 1,
+        "name": "Item 1",
+        "quantity": 44,
+        "color": "#81e0f8",
+        "checked": false
+      },
+      {
+        "id": 2,
+        "name": "Item 2",
+        "quantity": 30,
+        "color": "#5d649f",
+        "checked": false
+      },
+      {
+        "id": 3,
+        "name": "Item 3",
+        "quantity": 15,
+        "color": "#55f49d",
+        "checked": false
+      },
+      {
+        "id": 4,
+        "name": "Item 4",
+        "quantity": 10,
+        "color": "#fccfce",
+        "checked": false
+      },
+      {
+        "id": 5,
+        "name": "Item 5",
+        "quantity": 18,
+        "color": "#ff8f30",
+        "checked": false
+      }
+    ],
+    "state": "sorted",
+    "selected": false,
+    "selectedAll": false
+  },
+  {
+    "id": 4,
+    "name": "List 4",
+    "items": [
+      {
+        "id": 1,
+        "name": "Item 1",
+        "quantity": 21,
+        "color": "#a85f47",
+        "checked": false
+      },
+      {
+        "id": 2,
+        "name": "Item 2",
+        "quantity": 20,
+        "color": "#0aa59d",
+        "checked": false
+      },
+      {
+        "id": 3,
+        "name": "Item 3",
+        "quantity": 47,
+        "color": "#8fdc95",
+        "checked": false
+      },
+      {
+        "id": 4,
+        "name": "Item 4",
+        "quantity": 25,
+        "color": "#81046c",
+        "checked": false
+      },
+      {
+        "id": 5,
+        "name": "Item 5",
+        "quantity": 32,
+        "color": "#938cab",
+        "checked": false
+      },
+      {
+        "id": 6,
+        "name": "Item 6",
+        "quantity": 39,
+        "color": "#22ec24",
+        "checked": false
+      }
+    ],
+    "state": "sorted",
+    "selected": false,
+    "selectedAll": false
+  },
+  {
+    "id": 5,
+    "name": "List 5",
+    "items": [
+      {
+        "id": 1,
+        "name": "Item 1",
+        "quantity": 2,
+        "color": "#d09d63",
+        "checked": false
+      },
+      {
+        "id": 2,
+        "name": "Item 2",
+        "quantity": 23,
+        "color": "#4e40d8",
+        "checked": false
+      },
+      {
+        "id": 3,
+        "name": "Item 3",
+        "quantity": 39,
+        "color": "#eb0f7b",
+        "checked": false
+      },
+      {
+        "id": 4,
+        "name": "Item 4",
+        "quantity": 43,
+        "color": "#4612e4",
+        "checked": false
+      }
+    ],
+    "state": "sorted",
+    "selected": false,
+    "selectedAll": false
+  }
+]
