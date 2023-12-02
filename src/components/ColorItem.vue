@@ -1,7 +1,7 @@
 <template>
   <div class="color-item">
     <div class="item-details">
-      <input type="checkbox" v-model="localItem.checked" @change="emitItemUpdate" />
+      <input type="checkbox" :disabled="!localItem.quantity" v-model="localItem.checked" @change="emitItemUpdate" />
       <span>{{ localItem.name }}</span>
     </div>
     <div class="item-controls">

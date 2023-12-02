@@ -7,7 +7,9 @@
              :checked="isChecked" @change="toggleCheck">
       <span @click="toggleExpand">{{ list.name }}</span>
     </div>
-    <ColorItemsList v-if="isExpanded" :list="list" />
+    <transition name="color-items-list">
+      <ColorItemsList v-if="isExpanded" :list="list" />
+    </transition>
   </div>
 </template>
 
@@ -103,21 +105,51 @@ export default defineComponent({
   height: 0;
   margin-right: 0.5rem;
   border-style: solid;
+  transition: transform 0.3s ease;
 }
 
 .expand-icon.closed {
-  border-width: 10px 10px 0 10px;
-  border-color: #000 transparent transparent transparent;
+  border-width: 10px 0 10px 10px;
+  border-color: transparent transparent transparent #000;
 }
 
 .expand-icon.opened {
-  border-width: 10px;
-  border-color: transparent transparent transparent #000;
+  border-width: 0 10px 10px 10px;
+  border-color: transparent transparent #000 transparent;
+  transform: rotate(180deg);
 }
 
 .list-content {
   margin-top: 0.5rem;
   padding-left: 1.5rem;
   border-left: 2px solid #ccc;
+}
+
+/* .color-items-list-enter-active, .color-items-list-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.color-items-list-enter, .color-items-list-leave-to {
+  opacity: 0;
+} */
+
+.color-items-list-enter {
+  opacity: 0;
+}
+
+.color-items-list-enter-active {
+  transition: opacity 0.3s ease;
+}
+
+.color-items-list-enter-to {
+  opacity: 1;
+}
+
+.color-items-list-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.color-items-list-leave-to {
+  opacity: 0;
 }
 </style>

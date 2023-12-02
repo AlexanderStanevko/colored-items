@@ -6,10 +6,12 @@
         {{ toggleButtonText }}
       </button>
     </div>
-    <div class="squares">
+    <transition-group name="transition-group" tag="div" class="squares">
       <span v-for="square in displayState" :key="square.uniqueId" class="square"
-        :style="{ backgroundColor: square.color }" @click="removeSquare(square.uniqueId)"></span>
-    </div>
+        :style="{ backgroundColor: square.color }" @click="removeSquare(square.uniqueId)"
+      >
+      </span>
+    </transition-group>
   </div>
 </template>
 
@@ -163,6 +165,8 @@ export default defineComponent({
   height: 20px;
   margin: 2px;
   cursor: pointer;
+  animation: fadeIn 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 .card {
@@ -179,5 +183,19 @@ export default defineComponent({
   .toggle-state-button {
     margin-left: auto;
   }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.transition-group-enter-active, .transition-group-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.transition-group-enter, .transition-group-leave-to {
+  opacity: 0;
+  transform: scale(0.5);
 }
 </style>
