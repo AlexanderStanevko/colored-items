@@ -83,7 +83,6 @@ export default defineComponent({
 
 .checkbox-field {
   margin-right: 0.5rem;
-  /* appearance: none; */
   position: relative;
 }
 
