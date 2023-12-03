@@ -73,8 +73,10 @@ export default defineComponent({
       if (index !== -1) {
         const item = props.list.items.find(item => uniqueId.startsWith(`${item.id}-`))
         if (item && item.quantity > 0) {
-          itemsStore.updateItem(props.list.id, item.id, { quantity: item.quantity - 1 })
           displayState.value.splice(index, 1)
+          setTimeout(() => {
+            itemsStore.updateItem(props.list.id, item.id, { quantity: item.quantity - 1 })
+          }, 0)
         }
       }
     }
