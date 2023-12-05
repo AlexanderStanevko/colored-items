@@ -43,9 +43,12 @@ export const useItemsStore = defineStore({
     toggleList(listId) {
       const list = this.lists.find(l => l.id === listId)
       if (!list) return
-
-      list.items.forEach(item => item.checked = !item.checked)
-      list.selectedAll = list.selected = list.items.some(item => item.checked)
+    
+      const allSelected = list.items.every(item => item.checked)
+      list.items.forEach(item => item.checked = !allSelected)
+      
+      list.selectedAll = !allSelected
+      list.selected = !list.selectedAll || list.items.some(item => item.checked)
     },
    
     updateItem(listId, itemId, updates) {
