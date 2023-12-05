@@ -1,22 +1,50 @@
 <template>
   <div class="card">
     <div class="card-header">
-      <div class="card-title">{{ list.name }}</div>
-      <button v-if="displayState.length > 1" class="toggle-state-button" @click="toggleState">
+      <div class="card-title">
+        {{ list.name }}
+      </div>
+      <button 
+        v-if="showToggleButton" 
+        class="toggle-state-button" 
+        @click="toggleState"
+      >
         {{ toggleButtonText }}
       </button>
     </div>
-    <transition-group name="transition-group" tag="div" class="squares">
-      <span v-for="square in displayState" :key="square.uniqueId" class="square"
-        :style="{ backgroundColor: square.color }" @click="removeSquare(square.uniqueId)"
+    <transition-group 
+      name="transition-group" 
+      tag="div" 
+      class="squares"
+      :class="{ 'sorted': isSorted, 'shuffled': !isSorted }"
+    >
+      <div 
+        v-for="(group, index) in groupedSquares" 
+        :key="index" 
+        class="square-row"
       >
-      </span>
+        <span 
+          v-for="square in group" 
+          :key="square.uniqueId" 
+          class="square" 
+          :style="{ backgroundColor: square.color }"
+          @click="removeSquare(square.uniqueId)"
+        >
+        </span>
+      </div>
     </transition-group>
   </div>
 </template>
 
 <script>
-import { defineComponent, computed, ref, watch } from 'vue'
+import { 
+  defineComponent, 
+  computed, 
+  ref, 
+  watch, 
+  nextTick, 
+  onMounted 
+} from 'vue'
 import { useItemsStore } from '../stores/ItemsStore'
 
 export default defineComponent({
@@ -30,28 +58,27 @@ export default defineComponent({
   setup(props) {
     const itemsStore = useItemsStore()
     const isSorted = ref(true)
-    const wasShuffled = ref(false)
+    const displayState = ref([])
+    const removedItems = ref([])
 
-    const toggleButtonText = computed(() => {
-      return isSorted.value ? 'Перемешать' : 'Сортировать'
+    const toggleButtonText = computed(() => isSorted.value ? 'Shuffle' : 'Sort')
+
+    const showToggleButton = computed(() => {
+      const checkedItemsCount = props.list.items.reduce(
+        (count, item) => count + (item.checked && item.quantity > 0 ? 1 : 0), 0
+      )
+      return checkedItemsCount >= 2
     })
 
-    const displayItems = computed(() => {
-      let squares = []
-      props.list.items.forEach(item => {
-        if (item.checked) {
-          for (let i = 0; i < item.quantity; i++) {
-            squares.push({
-              ...item,
-              uniqueId: `${item.id}-${i}`
-            })
-          }
-        }
-      })
-      return isSorted.value ? squares : shuffleArray(squares)
+    const groupedSquares = computed(() => {
+      return isSorted.value
+        ? displayState.value.reduce((groups, square) => {
+            (groups[square.color] = groups[square.color] || []).push(square)
+            return groups
+          }, {})
+        : [displayState.value]
     })
 
-    const displayState = ref([...displayItems.value])
 
     const shuffleArray = (array) => {
       let currentIndex = array.length, randomIndex
@@ -60,12 +87,25 @@ export default defineComponent({
         randomIndex = Math.floor(Math.random() * currentIndex)
         currentIndex--
 
-        [array[currentIndex], array[randomIndex]] = [
-          array[randomIndex], array[currentIndex]]
+        [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]]
       }
 
-      wasShuffled.value = true
       return array
+    }
+
+    const createDisplayState = () => {
+      let squares = props.list.items
+        .filter(item => item.checked)
+        .flatMap(item => Array.from({ length: item.quantity }, (_, i) => ({
+          ...item,
+          uniqueId: `${item.id}-${i}`
+        })))
+
+      return squares
+    }
+
+    const updateQuantity = (item, quantityChange) => {
+      itemsStore.updateItem(props.list.id, item.id, { quantity: item.quantity + quantityChange })
     }
 
     const removeSquare = (uniqueId) => {
@@ -74,65 +114,61 @@ export default defineComponent({
         const item = props.list.items.find(item => uniqueId.startsWith(`${item.id}-`))
         if (item && item.quantity > 0) {
           displayState.value.splice(index, 1)
-          setTimeout(() => {
-            itemsStore.updateItem(props.list.id, item.id, { quantity: item.quantity - 1 })
-          }, 0)
+          removedItems.value.push(uniqueId)
+          nextTick(() => updateQuantity(item, -1))
         }
       }
     }
 
     const toggleState = () => {
       isSorted.value = !isSorted.value
-      if (isSorted.value) {
-        wasShuffled.value = false
-        displayState.value = [...displayItems.value]
-      } else {
-        displayState.value = shuffleArray([...displayItems.value])
-      }
-    }
-
-    const updateDisplayState = () => {
-      const newDisplayState = []
-      props.list.items.forEach(item => {
-        if (item.checked) {
-          for (let i = 0; i < item.quantity; i++) {
-            newDisplayState.push({
-              ...item,
-              uniqueId: `${item.id}-${i}`
-            })
-          }
-        }
-      })
-
       if (!isSorted.value) {
-        shuffleArray(newDisplayState)
+        displayState.value = shuffleArray([...createDisplayState()])
+      } else if (isSorted.value) {
+        displayState.value = createDisplayState()
       }
-
-      displayState.value = newDisplayState
     }
 
-    watch(
-      () => props.list.items,
-      () => {
-        updateDisplayState()
-      },
-      { deep: true }
-    )
+    const updateShuffledDisplayState = (newVal) => {
+      if (removedItems.value.length) {
+        removedItems.value = []
+        return
+      }
 
-    watch(
-      () => displayItems.value,
-      (newDisplayItems) => {
-        if (isSorted.value) {
-          displayState.value = [...newDisplayItems]
-        }
-      },
-      { immediate: true }
-    )
+      const totalQuantity = newVal.reduce((sum, item) => item.checked ? sum + item.quantity : sum, 0)
+      const currentTotalQuantity = displayState.value.length
+
+      if (totalQuantity !== currentTotalQuantity) {
+        displayState.value = shuffleArray(createDisplayState())
+        return
+      }
+
+      displayState.value = displayState.value.map(item => {
+        const updatedItem = newVal.find(({ id }) => id === item.id)
+        return updatedItem && updatedItem.checked ? { ...item, ...updatedItem } : item
+      }).filter(item => item.checked)
+   }
+
+
+    watch(() => props.list.items, (newVal) => {
+      if (!isSorted.value) {
+        updateShuffledDisplayState(newVal)
+      } else {
+        displayState.value = createDisplayState()
+      }
+    }, { deep: true })
+
+    onMounted(() => {
+      displayState.value = createDisplayState()
+    })
 
     return {
+      isSorted,
+      removedItems,
       displayState,
-      displayItems,
       toggleButtonText,
+      groupedSquares,
+      showToggleButton,
       removeSquare,
       toggleState,
     }
@@ -188,15 +224,24 @@ export default defineComponent({
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.5); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-.transition-group-enter-active, .transition-group-leave-active {
+.transition-group-enter-active,
+.transition-group-leave-active {
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-.transition-group-enter, .transition-group-leave-to {
+.transition-group-enter,
+.transition-group-leave-to {
   opacity: 0;
   transform: scale(0.5);
 }

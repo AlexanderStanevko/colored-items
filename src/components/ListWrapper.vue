@@ -125,14 +125,6 @@ export default defineComponent({
   border-left: 2px solid #ccc;
 }
 
-/* .color-items-list-enter-active, .color-items-list-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.color-items-list-enter, .color-items-list-leave-to {
-  opacity: 0;
-} */
-
 .color-items-list-enter {
   opacity: 0;
 }

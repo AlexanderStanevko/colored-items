@@ -1,5 +1,13 @@
 import { defineStore } from 'pinia'
 
+const findListAndItem = (store, listId, itemId) => {
+  const list = store.lists.find(l => l.id === listId)
+  if (!list) return {}
+
+  const itemIndex = list.items.findIndex(i => i.id === itemId)
+  return { list, itemIndex }
+}
+
 export const useItemsStore = defineStore({
   id: 'ItemsStore',
   state: () => ({
@@ -25,51 +33,38 @@ export const useItemsStore = defineStore({
         this.isListLoading = false
       }
     },
+
     saveOriginalOrder() {
       this.lists.forEach(list => {
         this.originalOrder[list.id] = [...list.items]
       })
     },
+    
     toggleList(listId) {
       const list = this.lists.find(l => l.id === listId)
       if (!list) return
 
-      const allSelected = list.items.every(item => item.checked)
-      if (allSelected) {
-        list.items.forEach(item => item.checked = false)
-        list.selectedAll = false
-        list.selected = false
-      } else {
-        list.items.forEach(item => item.checked = true)
-        list.selectedAll = true
-        list.selected = true
-      }
+      list.items.forEach(item => item.checked = !item.checked)
+      list.selectedAll = list.selected = list.items.some(item => item.checked)
     },
+   
     updateItem(listId, itemId, updates) {
-      const list = this.lists.find(l => l.id === listId)
-      if (!list) return
-
-      const itemIndex = list.items.findIndex(i => i.id === itemId)
-      if (itemIndex !== -1) {
-        Object.assign(list.items[itemIndex], updates)
-        
-        const allSelected = list.items.every(i => i.checked)
-        const anySelected = list.items.some(i => i.checked)
-
-        list.selectedAll = allSelected
-        list.selected = anySelected
-      }
+      const { list, itemIndex } = findListAndItem(this, listId, itemId)
+      if (itemIndex === -1) return
+  
+      Object.assign(list.items[itemIndex], updates)
+      list.selectedAll = list.items.every(i => i.checked)
+      list.selected = list.items.some(i => i.checked)
     },
 
     removeItem(listId, itemId) {
-      const list = this.lists.find(l => l.id === listId)
-      const itemIndex = list?.items.findIndex(i => i.id === itemId)
-      if (itemIndex !== -1) {
-        if (list.items[itemIndex].quantity > 1) {
-          list.items[itemIndex].quantity--
-        } else {
-          list.items.splice(itemIndex, 1)
-        }
+      const { list, itemIndex } = findListAndItem(this, listId, itemId)
+      if (itemIndex === -1) return
+
+      if (list.items[itemIndex].quantity > 1) {
+        list.items[itemIndex].quantity--
+      } else {
+        list.items.splice(itemIndex, 1)
       }
     },
   },
