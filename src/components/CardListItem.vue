@@ -212,7 +212,7 @@ export default defineComponent({
 }
 
 .card {
-  border: 2px solid black;
+  border: 2px solid var(--color-border);
   padding: 1rem;
   margin-bottom: 10px;
 }
