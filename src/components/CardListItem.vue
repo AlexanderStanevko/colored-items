@@ -199,21 +199,17 @@ export default defineComponent({
 
 .square-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(20px, 20px));
-  justify-content: start;
+  grid-template-columns: repeat(auto-fill, minmax(20px, 1fr));
   gap: 2px;
 }
 
 .square {
   height: 20px;
-  display: inline-block;
   margin: 2px 0;
   cursor: pointer;
   animation: fadeIn 0.3s ease;
   transition: background-color 0.3s ease;
 }
-
-
 
 .card {
   border: 2px solid black;
