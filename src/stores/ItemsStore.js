@@ -21,7 +21,7 @@ export const useItemsStore = defineStore({
     async fetchLists() {
       try {
         this.isListLoading = true
-        const response = await fetch('/listData.json')
+        const response = await fetch('listData.json')
         if (!response.ok) {
           throw new Error('Error fetching lists')
         }
@@ -39,7 +39,7 @@ export const useItemsStore = defineStore({
         this.originalOrder[list.id] = [...list.items]
       })
     },
-    
+
     toggleList(listId) {
       const list = this.lists.find(l => l.id === listId)
       if (!list) return
