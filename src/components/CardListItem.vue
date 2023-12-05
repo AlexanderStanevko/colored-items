@@ -197,15 +197,23 @@ export default defineComponent({
   cursor: pointer;
 }
 
+.square-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20px, 20px));
+  justify-content: start;
+  gap: 2px;
+}
+
 .square {
-  display: inline-block;
-  width: 20px;
   height: 20px;
-  margin: 2px;
+  display: inline-block;
+  margin: 2px 0;
   cursor: pointer;
   animation: fadeIn 0.3s ease;
   transition: background-color 0.3s ease;
 }
+
+
 
 .card {
   border: 2px solid black;
@@ -213,13 +221,14 @@ export default defineComponent({
   margin-bottom: 10px;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 260px) {
   .card-header {
-    justify-content: start;
+    flex-direction: column;
   }
 
   .toggle-state-button {
-    margin-left: auto;
+    margin-top: 0.5rem;
+    width: 100%;
   }
 }
 
