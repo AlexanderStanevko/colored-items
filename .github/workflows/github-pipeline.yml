@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Build and Deploy to GitHub Pages
 
 on:
   push:
@@ -8,19 +8,27 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout Repository
+    - name: Checkout Code
       uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18'
 
     - name: Install Dependencies
       run: npm install
 
-    - name: Build
-      run: npm run build
+    - name: Lint Code
+      run: npm lint
 
-    - name: Deploy
-      uses: JamesIves/github-pages-deploy-action@4.1.0
+    - name: Build Project
+      run: npm build
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
       with:
-        branch: gh-pages
-        folder: build
-        token: ${{ secrets.PERSONAL_SECRET_KEY_TO_DEPLOY }}
+        github_token: ${{ secrets.PERSONAL_SECRET_KEY_TO_DEPLOY }}
+        publish_dir: ./dist
