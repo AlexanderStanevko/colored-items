@@ -110,19 +110,13 @@ export default defineComponent({
 
 .expand-icon.closed {
   border-width: 10px 0 10px 10px;
-  border-color: transparent transparent transparent #000;
+  border-color: transparent transparent transparent var(--color-border);
 }
 
 .expand-icon.opened {
   border-width: 0 10px 10px 10px;
-  border-color: transparent transparent #000 transparent;
+  border-color: transparent transparent var(--color-border) transparent;
   transform: rotate(180deg);
-}
-
-.list-content {
-  margin-top: 0.5rem;
-  padding-left: 1.5rem;
-  border-left: 2px solid #ccc;
 }
 
 .color-items-list-enter {
