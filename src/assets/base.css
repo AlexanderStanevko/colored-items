@@ -48,6 +48,10 @@
     --color-heading: var(--vt-c-text-dark-1);
     --color-text: var( --vt-c-white-soft);
   }
+
+  input {
+    color: var(--color-text); 
+  }
 }
 
 *,
