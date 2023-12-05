@@ -42,7 +42,7 @@ export default defineComponent({
 
 .container>div {
   padding: 2rem 1rem;
-  border: 2px solid black;
+  border: 2px solid var(--color-border);
   width: 100%;
   overflow: auto;
   min-height: 100%;
